@@ -1,6 +1,6 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
-const Booking = require("./Booking");
+import { DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
+import Booking from "./Booking.js";
 
 const Payment = sequelize.define(
   "payments",
@@ -9,11 +9,11 @@ const Payment = sequelize.define(
     booking_id: { type: DataTypes.INTEGER, allowNull: false },
     amount: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     payment_method: {
-      type: DataTypes.ENUM("credit_card", "debit_card", "paypal", "cash"),
+      type: DataTypes.ENUM("test_card", "paypal"),
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM("pending", "completed", "failed", "refunded"),
+      type: DataTypes.ENUM("pending", "completed", "failed"),
       defaultValue: "pending",
     },
     transaction_id: { type: DataTypes.STRING, unique: true, allowNull: false },
@@ -25,4 +25,4 @@ const Payment = sequelize.define(
 Booking.hasOne(Payment, { foreignKey: "booking_id" });
 Payment.belongsTo(Booking, { foreignKey: "booking_id" });
 
-module.exports = Payment;
+export default Payment;

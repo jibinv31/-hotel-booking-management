@@ -1,5 +1,6 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+import { DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
+import Booking from "./Booking.js"; // ✅ Import Booking correctly
 
 const Room = sequelize.define(
   "rooms",
@@ -19,4 +20,8 @@ const Room = sequelize.define(
   { timestamps: false }
 );
 
-module.exports = Room;
+// ✅ Define Relationship AFTER declaring Room
+Room.hasMany(Booking, { foreignKey: "room_id" });
+Booking.belongsTo(Room, { foreignKey: "room_id" });
+
+export default Room;

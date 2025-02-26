@@ -1,11 +1,31 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { User } = require("../models/User");
+import express from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js"; // ✅ Use default import (Fixed)
 
 const router = express.Router();
 
-// User Login
+// ✅ User Registration Route
+router.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password: hashedPassword });
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ✅ User Login Route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -30,7 +50,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Middleware to Verify Token
+// ✅ Middleware to Verify Token
 router.get("/protected", verifyToken, (req, res) => {
   res.json({ message: "Protected route access granted", user: req.user });
 });
@@ -48,4 +68,4 @@ function verifyToken(req, res, next) {
   }
 }
 
-module.exports = router;
+export default router; // ✅ Fixed: Use `export default`

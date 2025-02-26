@@ -1,5 +1,5 @@
-const { Sequelize } = require("sequelize");
-require("dotenv").config();
+import { Sequelize } from "sequelize";
+import "dotenv/config";
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -8,11 +8,11 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: "mysql",
-    logging: false, // Disable query logging
+    logging: false,
   }
 );
 
-// Test Database Connection
+// ✅ Test Database Connection
 (async () => {
   try {
     await sequelize.authenticate();
@@ -22,4 +22,4 @@ const sequelize = new Sequelize(
   }
 })();
 
-module.exports = sequelize;
+export default sequelize; // ✅ Use `export default` instead of `module.exports`
