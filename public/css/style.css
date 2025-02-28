@@ -1,0 +1,202 @@
+/* ✅ Global Styling */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* ✅ Transparent Header */
+.header-transparent {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 15px 0;
+  background: rgba(0, 0, 0, 0.3); /* Slight transparency */
+  text-align: center;
+  color: white;
+  z-index: 100;
+}
+
+/* ✅ Navigation Bar */
+nav {
+  text-align: center;
+  margin-top: 10px;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 15px;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.nav-highlight {
+  color: lightgreen;
+}
+
+.nav-logout {
+  color: red;
+}
+
+nav ul li a:hover {
+  color: lightgray;
+}
+
+/* ✅ Hero Section */
+.hero {
+  width: 100vw;
+  min-height: 100vh; /* Ensures full background */
+  background: url("/images/hero.jpg") no-repeat center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+}
+
+/* ✅ Hero Content */
+.hero-content {
+  position: relative;
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* ✅ Room Selection Form */
+.selection-form {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+}
+
+.selection-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.selection-form input,
+.selection-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.selection-form button {
+  background: blue;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.selection-form button:hover {
+  background: darkblue;
+}
+
+/* ✅ Fix White Gap Issue */
+footer {
+  background: #222;
+  color: white;
+  padding: 15px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* ✅ Login & Signup Background */
+.auth-page {
+  height: 100vh;
+  background: url("/images/login-bg.jpg") no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.auth-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* ✅ Auth Container */
+.auth-container {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  width: 350px;
+  color: white;
+}
+
+.auth-container h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.auth-container input {
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid white;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.auth-container input::placeholder {
+  color: lightgray;
+}
+
+.auth-container button {
+  width: 100%;
+  padding: 12px;
+  background: blue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.auth-container button:hover {
+  background: darkblue;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | StayEase</title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+
+<body class="auth-page">
+  <!-- ✅ Transparent Header (Same as Homepage) -->
+  <header class="header-transparent">
+    <h1 class="brand-title">Welcome to StayEase</h1>
+    <p class="brand-subtitle">Your luxurious stay, just a click away!</p>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ✅ Auth Form -->
+  <div class="auth-container">
+    <h2>Create an Account</h2>
+
+    <form action="/auth/signup" method="POST">
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <p class="mt-4">
+      Already have an account?
+      <a href="/auth/login" class="text-blue-300">Login</a>
+    </p>
+  </div>
+
+  <!-- ✅ Footer -->
+  <footer>
+    <p>&copy; 2025 StayEase. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
