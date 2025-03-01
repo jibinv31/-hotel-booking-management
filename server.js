@@ -3,12 +3,15 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import session from "express-session";
+import cookieParser from "cookie-parser"; // ✅ Required for JWT Cookies
 import bodyParser from "body-parser";
 import sequelize from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import { adminAuth } from "./middlewares/authMiddleware.js"; // ✅ Import Admin Auth Middleware
 
 const app = express();
 
@@ -20,13 +23,15 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser()); // ✅ Enables Secure Cookie Handling
 
+// ✅ Session-based Authentication (for guests & basic sessions)
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "fallback_secret",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: false }, // Change to true when using HTTPS
   })
 );
 
@@ -44,7 +49,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // ✅ Routes
-app.use("/auth", authRoutes);
+app.use("/auth", authRoutes); // ✅ User & Admin Authentication
+app.use("/admin", adminAuth, adminRoutes); // ✅ Protect Admin Routes
 app.use("/rooms", roomRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/payments", paymentRoutes);
@@ -52,6 +58,14 @@ app.use("/payments", paymentRoutes);
 // ✅ Home Route (Pass session user)
 app.get("/", (req, res) => {
   res.render("index", { user: req.session.user || null });
+});
+
+// ✅ Admin Dashboard Route (JWT Protected)
+app.get("/admin/dashboard", adminAuth, (req, res) => {
+  if (req.user.role !== "super_admin" && req.user.role !== "admin") {
+    return res.status(403).send("Access Denied");
+  }
+  res.render("admin-dashboard");
 });
 
 // ✅ Start Server

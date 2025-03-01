@@ -1,74 +1,28 @@
 import express from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import {
+  showSignupPage,
+  showAdminSignupPage,
+  signup,
+  adminSignup,
+  showLoginPage,
+  showAdminLoginPage,
+  login,
+  logout,
+  refreshToken,
+} from "../controllers/authController.js";
 
 const router = express.Router();
 
-// ✅ Show Signup Page
-router.get("/signup", (req, res) => {
-  res.render("signup");
-});
-
-// ✅ Handle Signup
-router.post("/signup", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).send("User already exists");
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    res.redirect("/auth/login"); // Redirect to login page
-  } catch (error) {
-    console.error("Signup error:", error);
-    res.status(500).send("Server error");
-  }
-});
-
-// ✅ Show Login Page
-router.get("/login", (req, res) => {
-  res.render("login");
-});
-
-// ✅ Handle Login
-router.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).send("Invalid credentials");
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).send("Invalid credentials");
-    }
-
-    req.session.user = { id: user.id, name: user.name, email: user.email };
-
-    res.redirect("/");
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).send("Server error");
-  }
-});
-
-// ✅ Logout
-router.get("/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.redirect("/");
-  });
-});
+// ✅ Authentication Routes
+router.get("/signup", showSignupPage);
+router.post("/signup", signup);
+router.get("/admin-signup", showAdminSignupPage);
+router.post("/admin-signup", adminSignup);
+router.get("/login", showLoginPage);
+router.post("/login", login);
+router.get("/admin-login", showAdminLoginPage);
+router.post("/admin-login", login);
+router.get("/logout", logout);
+router.post("/refresh-token", refreshToken);
 
 export default router;

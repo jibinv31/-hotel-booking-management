@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | StayEase</title>
+    <link rel="stylesheet" href="/css/auth.css" />
+</head>
+
+<body class="auth-page">
+    <!-- ✅ Transparent Header -->
+    <header class="header-transparent">
+        <h1 class="brand-title">Welcome to StayEase</h1>
+        <p class="brand-subtitle">Admin Panel</p>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ✅ Admin Login Form -->
+    <div class="auth-container">
+        <h2>Admin Login</h2>
+
+        <form action="/auth/admin-login" method="POST">
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+        </form>
+
+        <p class="mt-4">
+            New admin? Your account must be approved by the Super Admin.
+        </p>
+    </div>
+
+    <!-- ✅ Footer -->
+    <footer>
+        <p>&copy; 2025 StayEase. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

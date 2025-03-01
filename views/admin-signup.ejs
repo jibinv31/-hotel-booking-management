@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Signup | StayEase</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body class="auth-page">
+    <header class="header-transparent">
+        <h1 class="brand-title">Admin Signup - StayEase</h1>
+        <p class="brand-subtitle">Register as an Admin</p>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="auth-container">
+        <h2>Admin Signup</h2>
+        <form action="/auth/admin-signup" method="POST">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <p class="mt-4">
+            Already have an account?
+            <a href="/auth/admin-login" class="text-blue-300">Login</a>
+        </p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 StayEase. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

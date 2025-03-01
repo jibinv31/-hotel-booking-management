@@ -16,7 +16,8 @@ html {
   top: 0;
   left: 0;
   padding: 15px 0;
-  background: rgba(0, 0, 0, 0.3); /* Slight transparency */
+  background: rgba(0, 0, 0, 0.3);
+  /* Slight transparency */
   text-align: center;
   color: white;
   z-index: 100;
@@ -69,7 +70,8 @@ nav ul li a:hover {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  background: rgba(0, 0, 0, 0.5);
+  /* Dark overlay */
 }
 
 /* ✅ Auth Container */
@@ -129,4 +131,20 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+}
+
+/* ✅ Fix for 'Sign Up' and 'Admin Login' Links Visibility */
+.auth-container a {
+  color: #ffffff;
+  /* Ensure white text for visibility */
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 10px;
+  /* Adds spacing */
+}
+
+.auth-container a:hover {
+  color: #ffcc00;
+  /* Highlight color when hovering */
 }
