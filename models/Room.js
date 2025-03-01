@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Booking from "./Booking.js"; // ✅ Import Booking correctly
+import { Booking } from "./Booking.js"; // ✅ Import Booking correctly
 
 const Room = sequelize.define(
   "Room",
@@ -8,12 +8,12 @@ const Room = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     room_number: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: "unique_room_number" // ✅ Named unique constraint to avoid duplication
+      unique: true, // ✅ Ensure unique room numbers
     },
     type: {
       type: DataTypes.ENUM("single", "double", "suite", "deluxe"), // ✅ Ensure consistency in ENUM values
@@ -21,7 +21,7 @@ const Room = sequelize.define(
     },
     price: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
+      allowNull: false,
     },
     status: {
       type: DataTypes.ENUM("available", "booked"),
@@ -31,8 +31,13 @@ const Room = sequelize.define(
   { timestamps: false } // ✅ Ensures Sequelize does not automatically add timestamps
 );
 
-// ✅ Define Relationship AFTER declaring Room
-Room.hasMany(Booking, { foreignKey: "room_id", onDelete: "CASCADE" });
-Booking.belongsTo(Room, { foreignKey: "room_id" });
+// ✅ Define relationships inside an exported function to avoid circular dependencies
+const setupRoomAssociations = () => {
+  Room.hasMany(Booking, { foreignKey: "room_id", onDelete: "CASCADE" });
+  Booking.belongsTo(Room, { foreignKey: "room_id" });
 
-export default Room;
+  console.log("🔗 Room Associations Set Up Successfully");
+};
+
+// ✅ Export as named export
+export { Room, setupRoomAssociations };

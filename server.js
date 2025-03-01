@@ -3,7 +3,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import session from "express-session";
-import cookieParser from "cookie-parser"; // ✅ Required for JWT Cookies
+import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import sequelize from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -11,7 +11,9 @@ import adminRoutes from "./routes/adminRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-import { adminAuth } from "./middlewares/authMiddleware.js"; // ✅ Import Admin Auth Middleware
+import { adminAuth } from "./middlewares/authMiddleware.js";
+import { setupRoomAssociations } from "./models/Room.js"; // ✅ Import Room Associations
+import { setupAssociations as setupBookingAssociations } from "./models/Booking.js"; // ✅ Import Booking Associations
 
 const app = express();
 
@@ -25,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser()); // ✅ Enables Secure Cookie Handling
 
-// ✅ Session-based Authentication (for guests & basic sessions)
+// ✅ Session-based Authentication
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "fallback_secret",
@@ -38,6 +40,7 @@ app.use(
 // ✅ Debugging Middleware (Logs Requests)
 app.use((req, res, next) => {
   console.log(`➡️ ${req.method} ${req.url}`);
+  console.log("🛠️ User in Session:", req.session.user);
   next();
 });
 
@@ -45,27 +48,31 @@ app.use((req, res, next) => {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// ✅ Serve static files
+// ✅ Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, "public")));
 
 // ✅ Routes
-app.use("/auth", authRoutes); // ✅ User & Admin Authentication
-app.use("/admin", adminAuth, adminRoutes); // ✅ Protect Admin Routes
+app.use("/auth", authRoutes);
+app.use("/admin", adminAuth, adminRoutes);
 app.use("/rooms", roomRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/payments", paymentRoutes);
 
-// ✅ Home Route (Pass session user)
+// ✅ Home Route
 app.get("/", (req, res) => {
   res.render("index", { user: req.session.user || null });
 });
 
-// ✅ Admin Dashboard Route (JWT Protected)
+// ✅ Admin Dashboard Route (Protected)
 app.get("/admin/dashboard", adminAuth, (req, res) => {
-  if (req.user.role !== "super_admin" && req.user.role !== "admin") {
-    return res.status(403).send("Access Denied");
+  console.log("🛡️ Admin Authenticated:", req.user);
+
+  if (!req.user || (req.user.role !== "super_admin" && req.user.role !== "admin")) {
+    console.log("❌ Access Denied for:", req.user);
+    return res.status(403).send("❌ Access Denied");
   }
-  res.render("admin-dashboard");
+
+  res.render("admin/dashboard");
 });
 
 // ✅ Start Server
@@ -74,10 +81,14 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   try {
     console.log("🔄 Connecting to database...");
-    await sequelize.authenticate(); // ✅ Ensure DB connection
+    await sequelize.authenticate();
     console.log("✅ Database connected successfully");
 
-    await sequelize.sync({ alter: true }); // ✅ Sync models safely
+    // ✅ Setup relationships before syncing
+    setupRoomAssociations();
+    setupBookingAssociations();
+
+    await sequelize.sync({ alter: true });
     console.log("✅ Database models synced successfully");
 
     app.listen(PORT, () => {
@@ -85,7 +96,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error("❌ Server startup failed:", error);
-    process.exit(1); // Stop server on failure
+    process.exit(1);
   }
 };
 

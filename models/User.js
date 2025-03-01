@@ -44,4 +44,4 @@ const User = sequelize.define(
   { timestamps: true }
 );
 
-export default User;
+export default User; // ✅ Ensure default export

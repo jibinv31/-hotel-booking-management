@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Room from "./Room.js"; // ✅ Import Room AFTER defining Booking
 import User from "./User.js";
 
 const Booking = sequelize.define(
@@ -11,6 +10,7 @@ const Booking = sequelize.define(
     room_id: { type: DataTypes.INTEGER, allowNull: false },
     check_in_date: { type: DataTypes.DATE, allowNull: false },
     check_out_date: { type: DataTypes.DATE, allowNull: false },
+    amountPaid: { type: DataTypes.DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
     status: {
       type: DataTypes.ENUM("pending", "confirmed", "canceled"),
       defaultValue: "pending",
@@ -19,8 +19,18 @@ const Booking = sequelize.define(
   { timestamps: false }
 );
 
-// ✅ Define Relationships AFTER declaring Booking
-User.hasMany(Booking, { foreignKey: "user_id" });
-Booking.belongsTo(User, { foreignKey: "user_id" });
+// ✅ Define relationships inside an async function
+const setupAssociations = async () => {
+  const { Room } = await import("./Room.js"); // ✅ Correct async import
 
-export default Booking;
+  User.hasMany(Booking, { foreignKey: "user_id" });
+  Booking.belongsTo(User, { foreignKey: "user_id" });
+
+  Room.hasMany(Booking, { foreignKey: "room_id" });
+  Booking.belongsTo(Room, { foreignKey: "room_id" });
+
+  console.log("🔗 Booking Associations Set Up Successfully");
+};
+
+// ✅ Export as named exports
+export { Booking, setupAssociations };

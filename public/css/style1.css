@@ -1,0 +1,108 @@
+/* ✅ Global Styling */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* ✅ Transparent Header */
+.header-transparent {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 15px 0;
+    background: rgba(0, 0, 0, 0.3);
+    /* Slight transparency */
+    text-align: center;
+    color: white;
+    z-index: 100;
+}
+
+/* ✅ Navigation Bar */
+nav {
+    text-align: center;
+    margin-top: 10px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 15px;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: lightgray;
+}
+
+/* ✅ Admin Dashboard Background */
+.admin-dashboard {
+    height: 100vh;
+    background: url("/images/dashboard-bg.jpg") no-repeat center center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.admin-dashboard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Dark overlay */
+}
+
+/* ✅ Dashboard Container */
+.dashboard-container {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    width: 450px;
+    color: white;
+    position: relative;
+}
+
+/* ✅ Dashboard Stats */
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    width: 150px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}

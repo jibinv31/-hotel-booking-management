@@ -31,6 +31,7 @@ const generateTokens = (user) => {
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRES || "7d" }
   );
 
+  console.log("🔑 Generated Tokens -> Access:", accessToken, "Refresh:", refreshToken);
   return { accessToken, refreshToken };
 };
 
@@ -48,6 +49,7 @@ export const showAdminSignupPage = (req, res) => {
 export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    console.log("🔍 User Signup Attempt:", name, email);
 
     if (!name || !email || !password) {
       console.log("❌ Signup Failed: Missing Fields");
@@ -61,7 +63,6 @@ export const signup = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = await User.create({
       name,
       email,
@@ -81,24 +82,23 @@ export const signup = async (req, res) => {
 export const adminSignup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    console.log("🔍 Admin Signup Attempt:", name, email);
 
     if (!name || !email || !password) {
-      console.log("❌ Admin Signup Failed: Missing Fields");
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      console.log("❌ Admin Signup Failed: Email Already Exists");
       return res.status(400).json({ message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    let role = "pending_admin"; // Default for new admin
+    let role = "pending_admin";
     const adminExists = await User.findOne({ where: { role: "super_admin" } });
+
     if (!adminExists) {
-      role = "super_admin"; // First admin is super_admin
+      role = "super_admin";
     }
 
     const newAdmin = await User.create({
@@ -106,7 +106,7 @@ export const adminSignup = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      approved: role === "super_admin", // Super admin auto-approved
+      approved: role === "super_admin",
     });
 
     console.log("✅ Admin Signup Successful:", newAdmin.email);
@@ -141,10 +141,11 @@ export const showAdminLoginPage = (req, res) => {
   res.render("admin-login");
 };
 
-// ✅ Handle Login (For Both Users & Admins)
+// ✅ Handle Login
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("🔍 Login Attempt:", email);
 
     if (!email || !password) {
       console.log("❌ Login Failed: Missing Credentials");
@@ -153,11 +154,15 @@ export const login = async (req, res) => {
 
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      console.log("❌ Login Failed: No user found with email:", email);
+      console.log("❌ Login Failed: No user found.");
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    console.log("✅ User Found:", user.email, "Role:", user.role);
+
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("🔍 Password Match:", isMatch);
+
     if (!isMatch) {
       console.log("❌ Login Failed: Incorrect Password");
       return res.status(400).json({ message: "Invalid credentials" });
@@ -173,7 +178,7 @@ export const login = async (req, res) => {
     const tokens = generateTokens(user);
     req.session.user = { id: user.id, name: user.name, email: user.email, role: user.role };
 
-    res.cookie("refreshToken", tokens.refreshToken, {
+    res.cookie("accessToken", tokens.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
