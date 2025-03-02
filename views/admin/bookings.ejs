@@ -1,0 +1,49 @@
+<%- include("partials/header") %>
+
+    <!-- ✅ Link to Admin Booking Page Styles -->
+    <link rel="stylesheet" href="/css/style1.css">
+
+    <div class="admin-bookings">
+        <h2>Manage Bookings</h2>
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            <% bookings.forEach(booking=> { %>
+                <tr>
+                    <td>
+                        <%= booking.User.name %> (<%= booking.User.email %>)
+                    </td>
+                    <td>
+                        <%= booking.Room.room_number %> (<%= booking.Room.type %>)
+                    </td>
+                    <td>
+                        <%= booking.check_in_date %>
+                    </td>
+                    <td>
+                        <%= booking.check_out_date %>
+                    </td>
+                    <td>
+                        <%= booking.status %>
+                    </td>
+                    <td>
+                        <% if (booking.status==="pending" ) { %>
+                            <form action="/bookings/admin/approve/<%= booking.id %>" method="POST">
+                                <button type="submit">Approve</button>
+                            </form>
+                            <form action="/bookings/admin/cancel/<%= booking.id %>" method="POST">
+                                <button type="submit">Cancel</button>
+                            </form>
+                            <% } %>
+                    </td>
+                </tr>
+                <% }); %>
+        </table>
+    </div>
+
+    <%- include("partials/footer") %>

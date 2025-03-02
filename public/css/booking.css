@@ -1,0 +1,60 @@
+/* ✅ Set Background Image */
+.booking-page {
+    background: url("/images/booking-bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ✅ Booking Container */
+.booking-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+/* ✅ Form Styling */
+.booking-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+.booking-container label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+    text-align: left;
+}
+
+.booking-container select,
+.booking-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* ✅ Button Styling */
+.booking-container button {
+    margin-top: 15px;
+    padding: 12px;
+    background: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.booking-container button:hover {
+    background: darkblue;
+}

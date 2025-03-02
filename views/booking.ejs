@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bookings</title>
+    <link rel="stylesheet" href="/css/style1.css">
+    <link rel="stylesheet" href="/css/booking.css">
+</head>
+
+<body>
+
+    <h2>Your Bookings</h2>
+
+    <% if (bookings.length> 0) { %>
+        <table>
+            <tr>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            <% bookings.forEach(booking=> { %>
+                <tr>
+                    <td>Room <%= booking.Room.room_number %> (<%= booking.Room.type %>)</td>
+                    <td>
+                        <%= booking.check_in_date %>
+                    </td>
+                    <td>
+                        <%= booking.check_out_date %>
+                    </td>
+                    <td>
+                        <%= booking.status %>
+                    </td>
+                    <td>
+                        <% if (booking.status==="pending" ) { %>
+                            <a href="/bookings/edit/<%= booking.id %>">Edit</a>
+                            <a href="/bookings/cancel/<%= booking.id %>">Cancel</a>
+                            <% } %>
+                    </td>
+                </tr>
+                <% }); %>
+        </table>
+        <% } else { %>
+            <p>You have no bookings.</p>
+            <% } %>
+
+</body>
+
+</html>

@@ -12,8 +12,8 @@ import roomRoutes from "./routes/roomRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import { adminAuth } from "./middlewares/authMiddleware.js";
-import { setupRoomAssociations } from "./models/Room.js"; // ✅ Import Room Associations
-import { setupAssociations as setupBookingAssociations } from "./models/Booking.js"; // ✅ Import Booking Associations
+import { setupRoomAssociations } from "./models/Room.js";
+import { setupAssociations as setupBookingAssociations } from "./models/Booking.js";
 
 const app = express();
 
@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cookieParser()); // ✅ Enables Secure Cookie Handling
+app.use(cookieParser());
 
 // ✅ Session-based Authentication
 app.use(
@@ -33,7 +33,7 @@ app.use(
     secret: process.env.SESSION_SECRET || "fallback_secret",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Change to true when using HTTPS
+    cookie: { secure: false },
   })
 );
 
@@ -88,7 +88,7 @@ const startServer = async () => {
     setupRoomAssociations();
     setupBookingAssociations();
 
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ force: false, alter: false });
     console.log("✅ Database models synced successfully");
 
     app.listen(PORT, () => {

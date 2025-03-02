@@ -4,7 +4,7 @@ import User from "../models/User.js";
 // ✅ Middleware to Verify Admin Access
 export const adminAuth = async (req, res, next) => {
     try {
-        const token = req.cookies.accessToken; // ✅ Get token from cookies
+        const token = req.cookies.accessToken;
         if (!token) {
             console.log("❌ No accessToken found.");
             return res.status(401).send("Access Denied.");
@@ -27,7 +27,7 @@ export const adminAuth = async (req, res, next) => {
                 return res.status(403).send("Forbidden. Admins only.");
             }
 
-            req.user = user; // ✅ Attach user to request object
+            req.user = user;
             next();
         });
     } catch (error) {

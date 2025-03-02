@@ -13,10 +13,13 @@ const Room = sequelize.define(
     room_number: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // ✅ Ensure unique room numbers
+      unique: {
+        name: "unique_room_number", // ✅ Ensures Sequelize does NOT recreate multiple unique constraints
+        msg: "Room number must be unique", // ✅ Custom error message for duplicate entries
+      },
     },
     type: {
-      type: DataTypes.ENUM("single", "double", "suite", "deluxe"), // ✅ Ensure consistency in ENUM values
+      type: DataTypes.ENUM("single", "double", "suite", "deluxe"),
       allowNull: false,
     },
     price: {
@@ -28,7 +31,7 @@ const Room = sequelize.define(
       defaultValue: "available",
     },
   },
-  { timestamps: false } // ✅ Ensures Sequelize does not automatically add timestamps
+  { timestamps: false }
 );
 
 // ✅ Define relationships inside an exported function to avoid circular dependencies
