@@ -9,20 +9,20 @@ import {
   cancelBooking,
 } from "../controllers/bookingController.js";
 import { verifyToken, adminAuth } from "../middlewares/authMiddleware.js";
-import { getAllRooms } from "../controllers/roomController.js";
+import { getAvailableRooms } from "../controllers/roomController.js";
 
 const router = express.Router();
 
-// ✅ User: View Their Bookings
+// ✅ User: View Their Own Bookings
 router.get("/", verifyToken, getUserBookings);
 
-// ✅ Separate Room Selection Page (Before Booking)
+// ✅ Room Selection Page (Before Booking)
 router.get("/select-room", verifyToken, async (req, res) => {
   try {
-    const rooms = await getAllRooms();
+    const rooms = await getAvailableRooms(); // ✅ Changed function to fetch only available rooms
     res.render("room-selection", { rooms, user: req.user });
   } catch (error) {
-    console.error("❌ Error loading rooms:", error);
+    console.error("❌ Error loading available rooms:", error);
     res.status(500).send("Server error");
   }
 });
@@ -39,8 +39,8 @@ router.put("/:id", verifyToken, updateBooking);
 // ✅ Cancel Booking (User)
 router.delete("/:id", verifyToken, deleteBooking);
 
-// ✅ Admin: Manage Bookings
-router.get("/admin", adminAuth, getUserBookings);
+// ✅ Admin: Manage All User Bookings
+router.get("/admin/all", adminAuth, getUserBookings);
 router.post("/admin/approve/:id", adminAuth, approveBooking);
 router.post("/admin/cancel/:id", adminAuth, cancelBooking);
 

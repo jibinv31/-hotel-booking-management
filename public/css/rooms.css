@@ -1,0 +1,105 @@
+/* ✅ General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: url("/images/hero.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* ✅ Transparent Header Styling */
+.header-transparent {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.header-transparent nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.header-transparent nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.header-transparent nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.header-transparent nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* ✅ Main Container */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    background: rgba(255, 255, 255, 0.85);
+    /* ✅ Slight Transparency */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Table Styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #007bff;
+    color: white;
+}
+
+/* ✅ Book Now Button */
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* ✅ Status Badge */
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* ✅ Footer Styling */
+footer {
+    text-align: center;
+    background: #222;
+    color: white;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

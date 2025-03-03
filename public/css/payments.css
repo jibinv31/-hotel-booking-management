@@ -1,0 +1,71 @@
+/* ✅ Set Background Image */
+body {
+    font-family: Arial, sans-serif;
+    background: url("/images/payment-bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* ✅ Transparent Header */
+.header-transparent {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* ✅ Payment Container */
+.payment-container {
+    max-width: 500px;
+    margin: 80px auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Booking Info */
+.booking-info p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+/* ✅ Payment Methods */
+.payment-methods {
+    margin: 20px 0;
+}
+
+.payment-methods label {
+    display: block;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+/* ✅ Payment Button */
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+/* ✅ Footer */
+footer {
+    text-align: center;
+    background: #333;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

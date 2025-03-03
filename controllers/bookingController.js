@@ -64,7 +64,7 @@ export const getBookingById = async (req, res) => {
   }
 };
 
-// ✅ Create Booking (User)
+// ✅ Create Booking (User) and Redirect to Payment
 export const createBooking = async (req, res) => {
   try {
     console.log("📅 Creating booking:", req.body);

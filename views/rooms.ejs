@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Available Rooms - StayEase</title>
+
+    <!-- ✅ Link Room-Specific CSS -->
+    <link rel="stylesheet" href="/css/rooms.css" />
+</head>
+
+<body>
+    <header class="header-transparent">
+        <h1 class="brand-title">Available Rooms</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/bookings">Bookings</a></li>
+                <li><a href="/payments">Payments</a></li>
+                <li><a href="/auth/logout" class="nav-logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Choose Your Room</h2>
+
+        <!-- ✅ Ensure check-in and check-out dates are carried forward -->
+        <% const checkInDate=check_in_date || new Date().toISOString().split("T")[0]; %>
+            <% const checkOutDate=check_out_date || new Date(Date.now() + 86400000).toISOString().split("T")[0]; %>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Room Number</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% rooms.forEach(room=> { %>
+                            <tr>
+                                <td>
+                                    <%= room.room_number %>
+                                </td>
+                                <td>
+                                    <%= room.type %>
+                                </td>
+                                <td>$<%= parseFloat(room.price).toFixed(2) %>
+                                </td> <!-- ✅ Fixed price issue -->
+                                <td>
+                                    <%= room.status %>
+                                </td>
+                                <td>
+                                    <% if (room.status==='available' ) { %>
+                                        <form action="/bookings/create" method="POST">
+                                            <input type="hidden" name="room_id" value="<%= room.id %>">
+                                            <input type="hidden" name="check_in_date" value="<%= checkInDate %>">
+                                            <input type="hidden" name="check_out_date" value="<%= checkOutDate %>">
+                                            <button type="submit" class="btn btn-success">Book Now</button>
+                                        </form>
+                                        <% } else { %>
+                                            <span class="badge badge-danger">Booked</span>
+                                            <% } %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 StayEase. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

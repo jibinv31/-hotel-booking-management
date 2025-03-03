@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - StayEase</title>
+
+    <!-- ✅ Link Payment-Specific CSS -->
+    <link rel="stylesheet" href="/css/payments.css">
+</head>
+
+<body>
+    <header class="header-transparent">
+        <h1 class="brand-title">Complete Your Payment</h1>
+    </header>
+
+    <div class="payment-container">
+        <h2>Booking Details</h2>
+        <div class="booking-info">
+            <p><strong>Room:</strong>
+                <%= booking.Room.room_number %> (<%= booking.Room.type %>)
+            </p>
+            <p><strong>Check-in:</strong>
+                <%= booking.check_in_date %>
+            </p>
+            <p><strong>Check-out:</strong>
+                <%= booking.check_out_date %>
+            </p>
+            <p><strong>Amount:</strong> $<%= parseFloat(booking.Room.price).toFixed(2) %>
+            </p>
+        </div>
+
+        <h3>Choose Payment Method</h3>
+        <form action="/payments/process" method="POST">
+            <input type="hidden" name="booking_id" value="<%= booking.id %>">
+            <input type="hidden" name="amount" value="<%= parseFloat(booking.Room.price).toFixed(2) %>">
+
+            <div class="payment-methods">
+                <label>
+                    <input type="radio" name="payment_method" value="test_card" required> Test Card
+                </label>
+                <label>
+                    <input type="radio" name="payment_method" value="paypal" required> PayPal
+                </label>
+            </div>
+
+            <button type="submit" class="btn-primary">Proceed to Payment</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 StayEase. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
