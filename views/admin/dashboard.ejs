@@ -4,45 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>StayEase Admin Dashboard</title>
+
+    <!-- ✅ Link to Admin Dashboard Styles -->
     <link rel="stylesheet" href="/css/style1.css">
 </head>
 
-<body class="admin-dashboard">
-
+<body>
+    <!-- ✅ Transparent Header (Matching Home Page) -->
     <header class="header-transparent">
+        <h1 class="brand-title">StayEase Admin Panel</h1>
+        <p class="brand-subtitle">Manage Your Hotel with Ease</p>
+
+        <!-- ✅ Admin Navigation -->
         <nav>
             <ul>
                 <li><a href="/admin/dashboard">Dashboard</a></li>
+                <li><a href="/admin/rooms">Manage Rooms</a></li>
+                <li><a href="/admin/bookings">Manage Bookings</a></li>
                 <li><a href="/admin/pending-admins">Admin Approvals</a></li>
-                <li><a href="/auth/logout">Logout</a></li>
+                <li><a href="/auth/logout" class="nav-logout">Logout</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="dashboard-container">
-        <h1>Welcome to StayEase Admin Dashboard</h1>
-        <div class="stats">
-            <div class="card">
-                <h3>Total Rooms</h3>
-                <p>
-                    <%= totalRooms %>
-                </p>
+    <!-- ✅ Admin Dashboard Section -->
+    <div class="admin-dashboard">
+        <div class="dashboard-container">
+            <h2>Welcome to StayEase Admin Dashboard</h2>
+
+            <!-- ✅ Dashboard Stats -->
+            <div class="stats">
+                <div class="card">
+                    <h3>Total Rooms</h3>
+                    <p>
+                        <%= totalRooms %>
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Total Bookings</h3>
+                    <p>
+                        <%= totalBookings %>
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Total Revenue</h3>
+                    <p>$<%= totalRevenue.toFixed(2) %>
+                    </p>
+                </div>
             </div>
-            <div class="card">
-                <h3>Total Bookings</h3>
-                <p>
-                    <%= totalBookings %>
-                </p>
-            </div>
-            <div class="card">
-                <h3>Total Revenue</h3>
-                <p>$<%= totalRevenue.toFixed(2) %>
-                </p>
+
+            <!-- ✅ Manage Sections -->
+            <div class="admin-actions" style="margin-top: 20px;">
+                <a href="/admin/rooms" class="btn-primary">Manage Rooms</a>
+                <a href="/admin/bookings" class="btn-primary">Manage Bookings</a>
             </div>
         </div>
     </div>
 
+    <!-- ✅ Footer -->
+    <footer>
+        <p>&copy; 2025 StayEase. All rights reserved.</p>
+    </footer>
 </body>
 
 </html>

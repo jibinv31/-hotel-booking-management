@@ -1,7 +1,29 @@
-<%- include("partials/header") %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Bookings</title>
 
     <!-- ✅ Link to Admin Booking Page Styles -->
     <link rel="stylesheet" href="/css/style1.css">
+</head>
+
+<body>
+
+    <!-- ✅ Admin Navigation Bar -->
+    <header class="admin-header">
+        <nav>
+            <ul>
+                <li><a href="/admin/dashboard">Dashboard</a></li>
+                <li><a href="/admin/rooms">Manage Rooms</a></li>
+                <li><a href="/admin/bookings">Manage Bookings</a></li>
+                <li><a href="/admin/pending-admins">Admin Approvals</a></li>
+                <li><a href="/auth/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <div class="admin-bookings">
         <h2>Manage Bookings</h2>
@@ -46,4 +68,10 @@
         </table>
     </div>
 
-    <%- include("partials/footer") %>
+    <footer>
+        <p>&copy; 2025 StayEase. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>
