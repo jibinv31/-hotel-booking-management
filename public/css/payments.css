@@ -17,6 +17,34 @@ body {
     text-align: center;
 }
 
+/* ✅ Fix Navigation */
+.nav-list {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-list li {
+    display: inline;
+}
+
+.nav-list li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.nav-list li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 /* ✅ Payment Container */
 .payment-container {
     max-width: 500px;
@@ -42,6 +70,27 @@ body {
     display: block;
     font-size: 16px;
     margin: 10px 0;
+}
+
+/* ✅ Credit/Debit Card Input */
+#card-input-container {
+    margin-top: 20px;
+    text-align: left;
+}
+
+#card-input-container label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+#card-input-container input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 /* ✅ Payment Button */

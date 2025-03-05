@@ -9,7 +9,6 @@
 </head>
 
 <body class="auth-page">
-  <!-- ✅ Transparent Header (Same as Homepage) -->
   <header class="header-transparent">
     <h1 class="brand-title">Welcome to StayEase</h1>
     <p class="brand-subtitle">Your luxurious stay, just a click away!</p>
@@ -17,14 +16,13 @@
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/contact">Contact</a></li>
+        <li><a href="/auth/login">Login</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- ✅ Auth Form -->
   <div class="auth-container">
     <h2>Create an Account</h2>
-
     <form action="/auth/signup" method="POST">
       <input type="text" name="name" placeholder="Full Name" required />
       <input type="email" name="email" placeholder="Email" required />
@@ -37,13 +35,13 @@
       <a href="/auth/login" class="text-blue-300">Login</a>
     </p>
 
-    <p class="mt-4">
-      Want to register as an admin?
-      <a href="/auth/admin-signup" class="text-green-300">Admin Signup</a>
+    <!-- ✅ Admin Signup Option -->
+    <p class="mt-2">
+      Are you an admin?
+      <a href="/auth/admin/signup" class="text-red-400">Admin Signup</a>
     </p>
   </div>
 
-  <!-- ✅ Footer -->
   <footer>
     <p>&copy; 2025 StayEase. All rights reserved.</p>
   </footer>

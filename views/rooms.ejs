@@ -5,8 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Available Rooms - StayEase</title>
-
-    <!-- ✅ Link Room-Specific CSS -->
     <link rel="stylesheet" href="/css/rooms.css" />
 </head>
 
@@ -17,7 +15,7 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/bookings">Bookings</a></li>
-                <li><a href="/payments">Payments</a></li>
+                <li><a href="/contact">Contact</a></li>
                 <li><a href="/auth/logout" class="nav-logout">Logout</a></li>
             </ul>
         </nav>
@@ -26,55 +24,90 @@
     <div class="container">
         <h2>Choose Your Room</h2>
 
-        <!-- ✅ Ensure check-in and check-out dates are carried forward -->
-        <% const checkInDate=check_in_date || new Date().toISOString().split("T")[0]; %>
-            <% const checkOutDate=check_out_date || new Date(Date.now() + 86400000).toISOString().split("T")[0]; %>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Select Dates</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% rooms.forEach(room=> { %>
+                    <tr>
+                        <td>
+                            <%= room.room_number %>
+                        </td>
+                        <td>
+                            <%= room.type %>
+                        </td>
+                        <td>$<%= parseFloat(room.price).toFixed(2) %>
+                        </td>
+                        <td>
+                            <form action="/bookings/create" method="POST">
+                                <input type="hidden" name="room_id" value="<%= room.id %>">
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Room Number</th>
-                            <th>Type</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% rooms.forEach(room=> { %>
-                            <tr>
-                                <td>
-                                    <%= room.room_number %>
-                                </td>
-                                <td>
-                                    <%= room.type %>
-                                </td>
-                                <td>$<%= parseFloat(room.price).toFixed(2) %>
-                                </td> <!-- ✅ Fixed price issue -->
-                                <td>
-                                    <%= room.status %>
-                                </td>
-                                <td>
-                                    <% if (room.status==='available' ) { %>
-                                        <form action="/bookings/create" method="POST">
-                                            <input type="hidden" name="room_id" value="<%= room.id %>">
-                                            <input type="hidden" name="check_in_date" value="<%= checkInDate %>">
-                                            <input type="hidden" name="check_out_date" value="<%= checkOutDate %>">
-                                            <button type="submit" class="btn btn-success">Book Now</button>
-                                        </form>
-                                        <% } else { %>
-                                            <span class="badge badge-danger">Booked</span>
-                                            <% } %>
-                                </td>
-                            </tr>
-                            <% }); %>
-                    </tbody>
-                </table>
+                                <!-- ✅ Updated Check-in and Check-out date selection -->
+                                <label for="check_in_date_<%= room.id %>">Check-in:</label>
+                                <input type="date" id="check_in_date_<%= room.id %>" name="check_in_date" required>
+
+                                <label for="check_out_date_<%= room.id %>">Check-out:</label>
+                                <input type="date" id="check_out_date_<%= room.id %>" name="check_out_date" required>
+
+                                <button type="submit" class="btn btn-success">Book Now</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
     </div>
 
     <footer>
         <p>&copy; 2025 StayEase. All rights reserved.</p>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toISOString().split("T")[0];
+
+            document.querySelectorAll('input[type="date"]').forEach(dateInput => {
+                if (dateInput.name === "check_in_date") {
+                    dateInput.min = today; // ✅ Check-in date should allow today or future dates
+                    dateInput.addEventListener("change", function () {
+                        const checkInDate = new Date(this.value);
+                        const checkOutInput = this.parentElement.querySelector('input[name="check_out_date"]');
+
+                        if (checkOutInput) {
+                            const nextDay = new Date(checkInDate);
+                            nextDay.setDate(checkInDate.getDate() + 1);
+                            checkOutInput.min = nextDay.toISOString().split("T")[0];
+                            if (new Date(checkOutInput.value) <= checkInDate) {
+                                checkOutInput.value = checkOutInput.min;
+                            }
+                        }
+                    });
+                }
+
+                if (dateInput.name === "check_out_date") {
+                    dateInput.addEventListener("click", function () {
+                        if (!this.min) {
+                            const checkInInput = this.parentElement.querySelector('input[name="check_in_date"]');
+                            if (checkInInput && checkInInput.value) {
+                                const checkInDate = new Date(checkInInput.value);
+                                const nextDay = new Date(checkInDate);
+                                nextDay.setDate(checkInDate.getDate() + 1);
+                                this.min = nextDay.toISOString().split("T")[0];
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

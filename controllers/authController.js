@@ -31,7 +31,6 @@ const generateTokens = (user) => {
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRES || "7d" }
   );
 
-  console.log("🔑 Generated Tokens -> Access:", accessToken, "Refresh:", refreshToken);
   return { accessToken, refreshToken };
 };
 
@@ -141,51 +140,58 @@ export const showAdminLoginPage = (req, res) => {
   res.render("admin-login");
 };
 
-// ✅ Handle Login
+// ✅ Handle User Login
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("🔍 Login Attempt:", email);
+    console.log("🔍 User Login Attempt:", email);
 
     if (!email || !password) {
-      console.log("❌ Login Failed: Missing Credentials");
       return res.status(400).json({ message: "Email and password required" });
     }
 
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      console.log("❌ Login Failed: No user found.");
+    const user = await User.findOne({ where: { email, role: "guest" } });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-
-    console.log("✅ User Found:", user.email, "Role:", user.role);
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log("🔍 Password Match:", isMatch);
-
-    if (!isMatch) {
-      console.log("❌ Login Failed: Incorrect Password");
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    if (user.role === "pending_admin") {
-      console.log("⚠️ Admin approval pending.");
-      return res.status(403).json({ message: "Admin approval pending." });
-    }
-
-    console.log("✅ Login Successful:", user.email);
 
     const tokens = generateTokens(user);
+    res.cookie("accessToken", tokens.accessToken, { httpOnly: true, secure: false });
+    res.cookie("refreshToken", tokens.refreshToken, { httpOnly: true, secure: false });
+
     req.session.user = { id: user.id, name: user.name, email: user.email, role: user.role };
 
-    res.cookie("accessToken", tokens.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-    });
-
-    res.redirect(user.role === "admin" || user.role === "super_admin" ? "/admin/dashboard" : "/");
+    res.redirect("/");
   } catch (error) {
-    console.error("❌ Login Error:", error);
+    console.error("❌ User Login Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ✅ Handle Admin Login
+export const adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log("🔍 Admin Login Attempt:", email);
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
+    }
+
+    const admin = await User.findOne({ where: { email, role: ["admin", "super_admin"] } });
+    if (!admin || !(await bcrypt.compare(password, admin.password))) {
+      return res.status(400).json({ message: "Invalid admin credentials" });
+    }
+
+    const tokens = generateTokens(admin);
+    res.cookie("accessToken", tokens.accessToken, { httpOnly: true, secure: false });
+    res.cookie("refreshToken", tokens.refreshToken, { httpOnly: true, secure: false });
+
+    req.session.user = { id: admin.id, name: admin.name, email: admin.email, role: admin.role };
+
+    res.redirect("/admin/dashboard");
+  } catch (error) {
+    console.error("❌ Admin Login Error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -193,6 +199,7 @@ export const login = async (req, res) => {
 // ✅ Logout
 export const logout = (req, res) => {
   req.session.destroy(() => {
+    res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
     res.redirect("/");
   });

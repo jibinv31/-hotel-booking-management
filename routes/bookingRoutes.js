@@ -2,6 +2,7 @@ import express from "express";
 import {
   createBooking,
   getUserBookings,
+  getAllBookings,
   getBookingById,
   updateBooking,
   deleteBooking,
@@ -19,7 +20,7 @@ router.get("/", verifyToken, getUserBookings);
 // ✅ Room Selection Page (Before Booking)
 router.get("/select-room", verifyToken, async (req, res) => {
   try {
-    const rooms = await getAvailableRooms(); // ✅ Changed function to fetch only available rooms
+    const rooms = await getAvailableRooms();
     res.render("room-selection", { rooms, user: req.user });
   } catch (error) {
     console.error("❌ Error loading available rooms:", error);
@@ -34,13 +35,13 @@ router.post("/create", verifyToken, createBooking);
 router.get("/:id", verifyToken, getBookingById);
 
 // ✅ Update Booking (User - Only before check-in)
-router.put("/:id", verifyToken, updateBooking);
+router.post("/:id/update", verifyToken, updateBooking);
 
 // ✅ Cancel Booking (User)
-router.delete("/:id", verifyToken, deleteBooking);
+router.post("/:id/delete", verifyToken, deleteBooking);
 
 // ✅ Admin: Manage All User Bookings
-router.get("/admin/all", adminAuth, getUserBookings);
+router.get("/admin/all", adminAuth, getAllBookings);
 router.post("/admin/approve/:id", adminAuth, approveBooking);
 router.post("/admin/cancel/:id", adminAuth, cancelBooking);
 

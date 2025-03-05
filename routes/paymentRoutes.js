@@ -9,13 +9,13 @@ import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// ✅ Show Payment Form (Only logged-in users can access)
-router.get("/:booking_id", verifyToken, showPaymentForm);
+// ✅ Step 1: Show Payment Page (Before Creating Booking)
+router.get("/new", verifyToken, showPaymentForm);
 
-// ✅ Process Payment (Stripe / PayPal / Test Card)
+// ✅ Step 2: Process Payment
 router.post("/process", verifyToken, processPayment);
 
-// ✅ PayPal Success & Cancellation Routes
+// ✅ Step 3: Handle PayPal Success & Cancellation
 router.get("/paypal/success", verifyToken, handlePayPalSuccess);
 router.get("/paypal/cancel", verifyToken, handlePayPalCancel);
 

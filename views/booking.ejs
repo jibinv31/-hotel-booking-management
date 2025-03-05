@@ -5,64 +5,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Bookings</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/booking.css">
 </head>
 
-<body>
+<body class="booking-page"> <!-- ✅ Added correct class -->
+
     <header class="header-transparent">
         <h1 class="brand-title">Your Bookings</h1>
         <nav>
-            <ul>
+            <ul class="nav-list">
                 <li><a href="/">Home</a></li>
                 <li><a href="/rooms">Rooms</a></li>
-                <li><a href="/payments">Payments</a></li>
+                <li><a href="/bookings">Bookings</a></li>
+                <li><a href="/contact">Contact</a></li>
                 <li><a href="/auth/logout" class="nav-logout">Logout</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="container">
+    <div class="booking-container"> <!-- ✅ Ensured container class matches CSS -->
         <h2>Your Bookings</h2>
         <% if (bookings.length> 0) { %>
             <table class="table">
-                <tr>
-                    <th>Room</th>
-                    <th>Check-in</th>
-                    <th>Check-out</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                <% bookings.forEach(booking=> { %>
+                <thead>
                     <tr>
-                        <td>Room <%= booking.Room.room_number %> (<%= booking.Room.type %>)</td>
-                        <td>
-                            <%= booking.check_in_date %>
-                        </td>
-                        <td>
-                            <%= booking.check_out_date %>
-                        </td>
-                        <td>
-                            <%= booking.status %>
-                        </td>
-                        <td>
-                            <% if (booking.status==="pending" ) { %>
-                                <a href="/payments/<%= booking.id %>" class="btn btn-primary">Pay Now</a>
-                                <form action="/bookings/delete/<%= booking.id %>" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger">Cancel</button>
-                                </form>
-                                <% } %>
-                        </td>
+                        <th>Room</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
-                    <% }); %>
+                </thead>
+                <tbody>
+                    <% bookings.forEach(booking=> { %>
+                        <tr>
+                            <td>Room <%= booking.Room.room_number %> (<%= booking.Room.type %>)</td>
+                            <td>
+                                <%= new Date(booking.check_in_date).toLocaleDateString() %>
+                            </td>
+                            <td>
+                                <%= new Date(booking.check_out_date).toLocaleDateString() %>
+                            </td>
+                            <td class="status">
+                                <% if (booking.status==="pending" ) { %>
+                                    <span class="status pending">Pending</span>
+                                    <% } else if (booking.status==="confirmed" ) { %>
+                                        <span class="status confirmed">Confirmed</span>
+                                        <% } else { %>
+                                            <span class="status canceled">Canceled</span>
+                                            <% } %>
+                            </td>
+                            <td>
+                                <% if (booking.status==="pending" ) { %>
+                                    <a href="/payments/new?booking_id=<%= booking.id %>&amount=<%= booking.amountPaid %>"
+                                        class="btn btn-primary">Pay Now</a>
+                                    <a href="/bookings/<%= booking.id %>/edit" class="btn btn-warning">Edit</a>
+                                    <form action="/bookings/<%= booking.id %>/delete" method="POST"
+                                        style="display:inline;">
+                                        <button type="submit" class="btn btn-danger">Cancel</button>
+                                    </form>
+                                    <% } else { %>
+                                        <span class="no-actions">No Actions Available</span>
+                                        <% } %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
             </table>
             <% } else { %>
-                <p>You have no bookings yet.</p>
+                <p class="no-bookings">You have no bookings yet.</p>
                 <% } %>
     </div>
 
     <footer>
         <p>&copy; 2025 StayEase. All rights reserved.</p>
     </footer>
+
 </body>
 
 </html>

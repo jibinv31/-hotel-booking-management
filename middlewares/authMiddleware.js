@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-// ✅ Middleware to Verify Admin Access
+// ✅ Middleware to Verify Admin Access with Token Refresh
 export const adminAuth = async (req, res, next) => {
     try {
         const token = req.cookies.accessToken;
+        const refreshToken = req.cookies.refreshToken;
+
         if (!token) {
             console.log("❌ No accessToken found.");
             return res.status(401).send("Access Denied.");
@@ -12,23 +14,50 @@ export const adminAuth = async (req, res, next) => {
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) {
-                console.log("❌ Invalid Token:", err);
-                return res.status(403).send("Invalid Token");
-            }
+                if (err.name === "TokenExpiredError") {
+                    console.log("⚠️ Token Expired. Attempting Refresh...");
 
-            const user = await User.findByPk(decoded.id);
-            if (!user) {
-                console.log("❌ User not found.");
-                return res.status(403).send("User Not Found");
-            }
+                    if (!refreshToken) {
+                        console.log("❌ No Refresh Token. Logging Out.");
+                        return res.redirect("/auth/logout");
+                    }
 
-            if (user.role !== "admin" && user.role !== "super_admin") {
-                console.log("❌ Forbidden: User is not an admin.");
-                return res.status(403).send("Forbidden. Admins only.");
-            }
+                    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (refreshErr, refreshDecoded) => {
+                        if (refreshErr) {
+                            console.log("❌ Invalid Refresh Token.");
+                            return res.redirect("/auth/logout");
+                        }
 
-            req.user = user;
-            next();
+                        const newAccessToken = jwt.sign(
+                            { id: refreshDecoded.id, role: refreshDecoded.role },
+                            process.env.JWT_SECRET,
+                            { expiresIn: "15m" }
+                        );
+
+                        res.cookie("accessToken", newAccessToken, {
+                            httpOnly: true,
+                            secure: process.env.NODE_ENV === "production",
+                            maxAge: 15 * 60 * 1000,
+                        });
+
+                        req.user = refreshDecoded;
+                        next();
+                    });
+                } else {
+                    console.log("❌ Invalid Token:", err.message);
+                    return res.status(401).send("Invalid Token");
+                }
+            } else {
+                console.log("✅ Token Verified:", decoded);
+                req.user = decoded;
+
+                if (req.user.role !== "admin" && req.user.role !== "super_admin") {
+                    console.log("❌ Unauthorized Access Attempt");
+                    return res.status(403).send("Access Denied: Admins Only");
+                }
+
+                next();
+            }
         });
     } catch (error) {
         console.error("❌ Admin Auth Middleware Error:", error);
@@ -36,7 +65,7 @@ export const adminAuth = async (req, res, next) => {
     }
 };
 
-// ✅ Middleware to Verify Any Logged-in User
+// ✅ Middleware to Verify User Token
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.accessToken;
     if (!token) {

@@ -64,24 +64,39 @@ export const getBookingById = async (req, res) => {
   }
 };
 
-// ✅ Create Booking (User) and Redirect to Payment
+// ✅ Create Booking and Redirect to Payment
 export const createBooking = async (req, res) => {
   try {
     console.log("📅 Creating booking:", req.body);
     const { room_id, check_in_date, check_out_date } = req.body;
 
+    // ✅ Validate check-in and check-out dates
+    if (!check_in_date || !check_out_date || new Date(check_out_date) <= new Date(check_in_date)) {
+      console.error("❌ Invalid date selection");
+      return res.status(400).send("Invalid check-in or check-out date.");
+    }
+
+    // ✅ Fetch room details
+    const room = await Room.findByPk(room_id);
+    if (!room || room.status !== "available") {
+      console.error("❌ Room not available");
+      return res.status(404).send("Room is not available.");
+    }
+
+    // ✅ Create the booking entry
     const newBooking = await Booking.create({
       user_id: req.user.id,
       room_id,
       check_in_date,
       check_out_date,
+      amountPaid: room.price,
       status: "pending",
     });
 
     console.log(`✅ Booking Created: ID=${newBooking.id}`);
 
-    // Redirect to payment page
-    res.redirect(`/payments/new?booking_id=${newBooking.id}&amount=100`);
+    // ✅ Redirect user to payment page
+    res.redirect(`/payments/new?room_id=${room_id}&check_in_date=${check_in_date}&check_out_date=${check_out_date}&amount=${room.price}`);
   } catch (error) {
     console.error("❌ Error creating booking:", error);
     res.status(500).send("Server error");
@@ -110,7 +125,7 @@ export const updateBooking = async (req, res) => {
   }
 };
 
-// ✅ Cancel Booking
+// ✅ Cancel Booking (User)
 export const deleteBooking = async (req, res) => {
   try {
     const { id } = req.params;

@@ -11,6 +11,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js"; // ✅ Import Contact Routes
 import { adminAuth } from "./middlewares/authMiddleware.js";
 import { setupRoomAssociations } from "./models/Room.js";
 import { setupAssociations as setupBookingAssociations } from "./models/Booking.js";
@@ -27,20 +28,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// ✅ Session-based Authentication
+// ✅ Session-based Authentication (Ensuring session is configured properly)
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "fallback_secret",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: false }, // ✅ Set to true in production with HTTPS
   })
 );
 
 // ✅ Debugging Middleware (Logs Requests)
 app.use((req, res, next) => {
   console.log(`➡️ ${req.method} ${req.url}`);
-  console.log("🛠️ User in Session:", req.session.user);
+  console.log("🛠️ User in Session:", req.session.user || "No user in session");
   next();
 });
 
@@ -50,6 +51,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // ✅ Serve static files (CSS, JS, Images)
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "public/images"))); // ✅ Ensure images are served
 
 // ✅ Routes
 app.use("/auth", authRoutes);
@@ -57,6 +59,7 @@ app.use("/admin", adminAuth, adminRoutes);
 app.use("/rooms", roomRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/payments", paymentRoutes);
+app.use("/contact", contactRoutes); // ✅ Added Contact Route
 
 // ✅ Home Route
 app.get("/", (req, res) => {
@@ -92,7 +95,7 @@ const startServer = async () => {
     console.log("✅ Database models synced successfully");
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("❌ Server startup failed:", error);
