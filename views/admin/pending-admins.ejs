@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Admin Approvals</title>
+    <link rel="stylesheet" href="/css/approval.css"> <!-- ✅ Linking new CSS -->
+</head>
+
+<body>
+
+    <!-- ✅ Transparent Header (Now includes Navigation) -->
+    <header class="header-transparent">
+        <h1 class="brand-title">StayEase Admin Panel</h1>
+        <p class="brand-subtitle">Manage Your Hotel with Ease</p>
+
+        <!-- ✅ Admin Navigation (Same as Dashboard) -->
+        <nav>
+            <ul>
+                <li><a href="/admin/dashboard">Dashboard</a></li>
+                <li><a href="/admin/rooms">Manage Rooms</a></li>
+                <li><a href="/admin/bookings">Manage Bookings</a></li>
+                <li><a href="/admin/pending-admins">Admin Approvals</a></li>
+                <li><a href="/auth/logout" class="nav-logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <% if (pendingAdmins.length> 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% pendingAdmins.forEach(admin=> { %>
+                        <tr>
+                            <td>
+                                <%= admin.name %>
+                            </td>
+                            <td>
+                                <%= admin.email %>
+                            </td>
+                            <td>
+                                <form action="/admin/approve-admin/<%= admin.id %>" method="POST">
+                                    <button type="submit" class="approve-btn">Approve</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+            <% } else { %>
+                <p class="no-approvals">No pending admin approvals.</p>
+                <% } %>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 StayEase. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

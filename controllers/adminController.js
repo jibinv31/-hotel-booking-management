@@ -32,6 +32,33 @@ export const getAllRooms = async (req, res) => {
     }
 };
 
+// ✅ Fetch All Bookings for Admin (Fix for undefined User/Room)
+export const getAllBookings = async (req, res) => {
+    try {
+        console.log("🔍 Fetching all bookings...");
+        const bookings = await Booking.findAll({
+            include: [
+                { model: User, attributes: ["id", "name", "email"], required: false }, // ✅ Ensures missing User doesn't crash
+                { model: Room, attributes: ["id", "room_number", "type"], required: false }, // ✅ Ensures missing Room doesn't crash
+            ],
+            order: [["check_in_date", "DESC"]],
+        });
+
+        console.log(`✅ Found ${bookings.length} bookings.`);
+
+        // ✅ Log any missing user or room for debugging
+        bookings.forEach((booking) => {
+            if (!booking.User) console.warn(`⚠️ Booking ID ${booking.id} has no User assigned!`);
+            if (!booking.Room) console.warn(`⚠️ Booking ID ${booking.id} has no Room assigned!`);
+        });
+
+        res.render("admin/booking", { bookings });
+    } catch (error) {
+        console.error("❌ Error fetching bookings:", error.message);
+        res.status(500).send("Internal Server Error: Unable to fetch bookings.");
+    }
+};
+
 // ✅ Create Room
 export const createRoom = async (req, res) => {
     try {
@@ -94,11 +121,57 @@ export const deleteRoom = async (req, res) => {
     }
 };
 
+// ✅ Approve Booking
+export const approveBooking = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log(`✔ Approving Booking ID=${id}`);
+
+        const booking = await Booking.findByPk(id);
+        if (!booking) {
+            console.log(`❌ Booking ID=${id} not found.`);
+            return res.status(404).send("Booking not found.");
+        }
+
+        booking.status = "approved";
+        await booking.save();
+
+        console.log(`✅ Booking Approved: ID=${id}`);
+        res.redirect("/admin/bookings");
+    } catch (error) {
+        console.error("❌ Error approving booking:", error.message);
+        res.status(500).send("Internal Server Error: Unable to approve booking.");
+    }
+};
+
+// ✅ Cancel Booking
+export const cancelBooking = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log(`❌ Cancelling Booking ID=${id}`);
+
+        const booking = await Booking.findByPk(id);
+        if (!booking) {
+            console.log(`❌ Booking ID=${id} not found.`);
+            return res.status(404).send("Booking not found.");
+        }
+
+        booking.status = "canceled";
+        await booking.save();
+
+        console.log(`✅ Booking Canceled: ID=${id}`);
+        res.redirect("/admin/bookings");
+    } catch (error) {
+        console.error("❌ Error canceling booking:", error.message);
+        res.status(500).send("Internal Server Error: Unable to cancel booking.");
+    }
+};
+
 // ✅ Get Pending Admins (Super Admin Approval)
 export const getPendingAdmins = async (req, res) => {
     try {
         console.log("🔍 Fetching pending admin approvals...");
-        const pendingAdmins = await User.findAll({ where: { approved: false } });
+        const pendingAdmins = await User.findAll({ where: { role: "pending_admin", approved: false } });
 
         console.log(`✅ Found ${pendingAdmins.length} pending admins.`);
         res.render("admin/pending-admins", { pendingAdmins });
@@ -120,8 +193,8 @@ export const approveAdmin = async (req, res) => {
             return res.status(404).send(`Admin with ID ${id} not found.`);
         }
 
-        admin.role = "admin";
-        admin.approved = true;
+        admin.role = "admin"; // ✅ Change role from pending_admin to admin
+        admin.approved = true; // ✅ Mark as approved
         await admin.save();
 
         console.log(`✅ Admin Approved Successfully: Email=${admin.email}`);
