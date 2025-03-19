@@ -193,3 +193,77 @@ footer {
     width: 100%;
     background: rgba(0, 0, 0, 0.8);
 }
+
+/* ✅ Responsive Design */
+@media (max-width: 1024px) {
+    .booking-container {
+        width: 90%;
+        padding: 25px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .table {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+
+    .btn {
+        padding: 7px 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header-transparent {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .booking-container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .header-transparent {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 6px;
+    }
+
+    .btn {
+        padding: 6px 8px;
+    }
+}

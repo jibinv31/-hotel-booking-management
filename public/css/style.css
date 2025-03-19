@@ -16,7 +16,8 @@ html {
   top: 0;
   left: 0;
   padding: 15px 0;
-  background: rgba(0, 0, 0, 0.3); /* Slight transparency */
+  background: rgba(0, 0, 0, 0.3);
+  /* Slight transparency */
   text-align: center;
   color: white;
   z-index: 100;
@@ -65,7 +66,8 @@ nav ul li a:hover {
 /* ✅ Hero Section */
 .hero {
   width: 100vw;
-  min-height: 100vh; /* Ensures full background */
+  min-height: 100vh;
+  /* Ensures full background */
   background: url("/images/hero.jpg") no-repeat center center;
   background-size: cover;
   display: flex;
@@ -79,7 +81,8 @@ nav ul li a:hover {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  background: rgba(0, 0, 0, 0.4);
+  /* Dark overlay */
 }
 
 /* ✅ Hero Content */
@@ -199,4 +202,111 @@ footer {
 
 .auth-container button:hover {
   background: darkblue;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 1024px) {
+  .hero-content {
+    font-size: 1.8rem;
+  }
+
+  .selection-form {
+    flex-direction: column;
+    width: 90%;
+    padding: 15px;
+  }
+
+  .auth-container {
+    width: 90%;
+    padding: 25px;
+  }
+
+  .auth-container h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    font-size: 1.5rem;
+  }
+
+  .selection-form {
+    width: 95%;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .auth-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .auth-container h2 {
+    font-size: 18px;
+  }
+
+  .auth-container button {
+    font-size: 14px;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-transparent {
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    font-size: 1.2rem;
+  }
+
+  .selection-form {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .selection-form input,
+  .selection-form select {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .selection-form button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .auth-container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .auth-container h2 {
+    font-size: 16px;
+  }
+
+  .auth-container input {
+    font-size: 12px;
+  }
+
+  .auth-container button {
+    font-size: 12px;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .header-transparent {
+    font-size: 13px;
+    padding: 10px;
+  }
 }

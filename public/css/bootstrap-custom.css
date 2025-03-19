@@ -14,6 +14,7 @@ body {
     padding: 20px;
 }
 
+/* ✅ Form & Table Containers */
 .admin-form,
 .table-container {
     background: rgba(255, 255, 255, 0.9);
@@ -21,6 +22,7 @@ body {
     border-radius: 8px;
 }
 
+/* ✅ Table Styling */
 th,
 td {
     padding: 10px;
@@ -30,4 +32,108 @@ td {
 
 th {
     background: #f4f4f4;
+}
+
+/* ✅ Buttons */
+.btn {
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: red;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: darkred;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 1024px) {
+    .admin-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .admin-form,
+    .table-container {
+        padding: 15px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .admin-form,
+    .table-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 6px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-container {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .admin-form,
+    .table-container {
+        width: 100%;
+        padding: 8px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 4px;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
 }

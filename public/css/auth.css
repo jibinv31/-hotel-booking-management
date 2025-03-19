@@ -148,3 +148,75 @@ footer {
   color: #ffcc00;
   /* Highlight color when hovering */
 }
+
+/* ✅ Responsive Design */
+@media (max-width: 1024px) {
+  .auth-container {
+    width: 80%;
+    padding: 25px;
+  }
+
+  nav ul {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .auth-page {
+    align-items: flex-start;
+    padding-top: 80px;
+  }
+
+  .auth-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .auth-container h2 {
+    font-size: 20px;
+  }
+
+  .auth-container input {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .auth-container button {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-transparent {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+
+  .auth-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .auth-container h2 {
+    font-size: 18px;
+  }
+
+  .auth-container input {
+    width: 100%;
+    padding: 6px;
+  }
+
+  .auth-container button {
+    padding: 8px;
+  }
+
+  nav ul {
+    flex-direction: column;
+    text-align: center;
+  }
+}

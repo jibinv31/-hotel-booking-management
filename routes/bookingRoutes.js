@@ -14,6 +14,16 @@ import { getAvailableRooms } from "../controllers/roomController.js";
 
 const router = express.Router();
 
+// ✅ Redirect unauthenticated users to login when accessing booking
+router.get("/search", (req, res) => {
+  if (!req.session.user) {  // Check if user is logged in via session
+    return res.redirect("/auth/login"); // Redirect to login page if not authenticated
+  }
+
+  // ✅ If logged in, proceed to room selection
+  res.redirect("/booking/select-room");
+});
+
 // ✅ User: View Their Own Bookings
 router.get("/", verifyToken, getUserBookings);
 

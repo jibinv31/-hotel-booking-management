@@ -118,3 +118,94 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+/* ✅ Responsive Design */
+@media (max-width: 1024px) {
+    .payment-container {
+        width: 80%;
+        padding: 25px;
+    }
+
+    .booking-info p {
+        font-size: 14px;
+    }
+
+    .payment-methods label {
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        font-size: 14px;
+        padding: 10px 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .payment-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .booking-info p {
+        font-size: 13px;
+    }
+
+    .payment-methods label {
+        font-size: 13px;
+    }
+
+    .btn-primary {
+        font-size: 13px;
+        padding: 10px 15px;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-transparent {
+        padding: 15px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-container {
+        width: 100%;
+        padding: 15px;
+        margin: 60px auto;
+    }
+
+    .booking-info p {
+        font-size: 12px;
+    }
+
+    .payment-methods label {
+        font-size: 12px;
+    }
+
+    #card-input-container label {
+        font-size: 12px;
+    }
+
+    #card-input-container input {
+        font-size: 12px;
+    }
+
+    .btn-primary {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .header-transparent {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

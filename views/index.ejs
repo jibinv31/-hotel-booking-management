@@ -5,6 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StayEase - Home</title>
+
+  <!-- ✅ PWA Manifest and Icons -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
+  <meta name="theme-color" content="#007BFF">
+
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 
@@ -30,7 +37,9 @@
   <div class="hero">
     <div class="hero-content">
       <h2>Experience Luxury Like Never Before</h2>
-      <form action="/rooms" method="GET" class="selection-form">
+
+      <!-- ✅ Redirect unauthenticated users to login -->
+      <form action="<%= user ? '/rooms' : '/auth/login' %>" method="GET" class="selection-form">
         <div class="form-group">
           <label for="roomType">Room Type</label>
           <select id="roomType" name="roomType">
@@ -60,6 +69,52 @@
   <footer>
     <p>&copy; 2025 StayEase. All rights reserved.</p>
   </footer>
+
+  <!-- ✅ Register Service Worker for PWA -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/service-worker.js")
+          .then(() => console.log("✅ Service Worker Registered"))
+          .catch(err => console.log("❌ Service Worker Registration Failed", err));
+      });
+    }
+  </script>
+
+  <!-- ✅ Add PWA Install Button -->
+  <script>
+    let deferredPrompt;
+
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      deferredPrompt = event;
+
+      // Create an install button dynamically
+      const installButton = document.createElement("button");
+      installButton.innerText = "Install StayEase App";
+      installButton.style.position = "fixed";
+      installButton.style.bottom = "20px";
+      installButton.style.right = "20px";
+      installButton.style.padding = "10px";
+      installButton.style.background = "#007bff";
+      installButton.style.color = "white";
+      installButton.style.border = "none";
+      installButton.style.borderRadius = "5px";
+      installButton.style.cursor = "pointer";
+      document.body.appendChild(installButton);
+
+      installButton.addEventListener("click", () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === "accepted") {
+            console.log("✅ User accepted PWA install");
+            installButton.style.display = "none";
+          }
+        });
+      });
+    });
+  </script>
+
 </body>
 
 </html>

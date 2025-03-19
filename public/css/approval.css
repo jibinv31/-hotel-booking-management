@@ -123,3 +123,73 @@ footer {
     color: white;
     text-align: center;
 }
+
+/* ✅ Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard-container {
+        width: 95%;
+        margin-top: 100px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+
+    .approve-btn {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-transparent {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+
+    .dashboard-container {
+        width: 100%;
+        padding: 15px;
+        margin-top: 80px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 6px;
+    }
+
+    .approve-btn {
+        padding: 6px 10px;
+    }
+}

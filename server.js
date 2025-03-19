@@ -53,6 +53,18 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "public/images"))); // ✅ Ensure images are served
 
+// ✅ Serve Service Worker explicitly (Fix MIME type issues)
+app.get("/service-worker.js", (req, res) => {
+  res.setHeader("Content-Type", "application/javascript");
+  res.sendFile(path.join(__dirname, "public", "service-worker.js"));
+});
+
+// ✅ Serve Manifest.json explicitly
+app.get("/manifest.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.sendFile(path.join(__dirname, "public", "manifest.json"));
+});
+
 // ✅ Routes
 app.use("/auth", authRoutes);
 app.use("/admin", adminAuth, adminRoutes);
